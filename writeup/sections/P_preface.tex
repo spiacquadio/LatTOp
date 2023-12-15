@@ -1,0 +1,16 @@
+\begin{textblock*}{\linewidth}(88mm,12mm)
+	\includegraphics*[height=16mm]{./figures/rwth_sla}
+\end{textblock*}
+
+\begin{textblock*}{\textwidth}(30mm,60mm)
+	\centering
+	{\bfseries Masterarbeit} \\[1ex]
+	\bfseries\scshape 
+		Multi-Functional Topology Optimization of Lattice Structures with Embedded Phase Change Material for use in Spacecraft Structures 
+	\par
+\end{textblock*}
+\vspace*{40mm}
+
+Phase change materials (PCMs) are a promising family of materials that have great potential in thermal energy storage and absorption. PCMs on their own, however, generally have poor thermal conductivity which means the PCM only melts around the heat source. This also means there is a high temperature gradient throughout the domain which is undesirable when keeping electronic components cool. By embedding lattice structures with a PCM, the effective thermal conductivity is increased to levels high enough that the structure can be used as a simple thermal control unit that can damp transient effects of a pulsating heat source, or act alone and keep a heat source cool for a fixed duration without the need of an additional heat sink. To maximize the efficiency of a structure, a multi-functional approach to topology optimization can be used to find an ideal structure that fulfills both thermal and structural requirements.
+
+This thesis aims to develop a methodology and basic tools to find an optimized structure that can minimize the temperature on a thermal boundary condition, and maximize the stiffness of the domain. The phase change problem will also be considered to account for the latent heat effects of how the domain melts. Previous works have been conducted that developed semi-analytical models for the material properties. These models will be used as homogenized material properties. It is hypothesized that automatic differentiation (AD) will also be useful in computing the many finite element derivatives that are required in topology optimization. 

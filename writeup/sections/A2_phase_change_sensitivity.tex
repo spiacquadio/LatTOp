@@ -1,0 +1,88 @@
+\chapter{Phase Change Sensitivity}
+\label{appendix:B}
+
+Recall that the residual form to solve the phase change problem is given as shown below. This was derived and given by \cite{Nallathambi_Specht_Bertram_2009}
+\begin{equation*}
+    R(T^{n+1}) = f\Delta t + \mathbf{C}T^n - (L^{n+1} - L^n) - (\mathbf{C} + \mathbf{K}\Delta t)T^{n+1}
+    \label{eq:phase_change_residual}
+  \end{equation*}
+  
+  \subsubsection*{\emph{Linear Gradient}}
+  When the system of equations is linear, the gradient can be computed as follows. Equation \ref{eq:phase_change_residual_linear} shows the simplified residual equation when the latent heat vectors are equal. The equation essentially becomes a linear system of equations that can be solved.
+  \begin{equation}
+    \begin{split}
+      T^{n+1} &= (\mathbf{C}+\mathbf{K}\Delta t)^{-1}(f\Delta t + \mathbf{C}T^n) \\
+      T^{n+1} &= \mathbf{A}^{-1}b    
+    \end{split}
+    \label{eq:phase_change_residual_linear}
+  \end{equation} 
+  
+  The gradient of this temperature vector can then be determined as follows in equation \ref{eq:phase_change_residual_gradient}. One thing to note from this derivative is that the derivative of the previous temperature vector is required. This means that the derivatives need to be tracked throughout each iteration. This has the effect of accumulating the transient effects throughout the entire simulation.
+  \begin{subequations}
+    \begin{equation}
+      \begin{split}
+        \frac{\partial T^{n+1}}{\partial\rho} &= \frac{\partial}{\partial\rho}\mathbf{A}^{-1}b \\
+        &= \frac{\partial\mathbf{A}^{-1}}{\partial\rho}b + \mathbf{A}^{-1}\frac{\partial b}{\partial\rho}
+      \end{split}
+    \end{equation}
+    \begin{equation}
+      \begin{split}
+        \frac{\partial\mathbf{A}^{-1}}{\partial\rho_i}b &= -\mathbf{A}^{-1}\frac{\partial\mathbf{A}}{\partial\rho_i}\mathbf{A}^{-1}b \\
+        &= -\mathbf{A}^{-1}\frac{\partial}{\partial\rho_i}(\mathbf{C} + \mathbf{K}\Delta t)\mathbf{A}^{-1}b \\
+        &= -\mathbf{A}^{-1}\left(\frac{\partial\mathbf{C}}{\partial\rho_i} + \Delta t\frac{\partial\mathbf{K}}{\partial\rho_i}\right)\mathbf{A}^{-1}b
+      \end{split}
+    \end{equation}
+    \begin{equation}
+      \begin{split}
+        \frac{\partial b}{\partial\rho} &= \frac{\partial}{\partial\rho}(f\Delta t + \mathbf{C}T^n) \\
+        &= \Delta t\frac{\partial f}{\partial\rho} + \frac{\partial}{\partial\rho}\mathbf{C}T^n \\
+        &= \frac{\partial\mathbf{C}}{\partial\rho}T^n + \mathbf{C}\frac{\partial T^n}{\partial\rho}
+      \end{split}
+    \end{equation}
+    \label{eq:phase_change_residual_gradient}
+  \end{subequations}
+  
+  
+  \subsubsection*{\emph{Non-Linear Gradient}}
+  The computation for the non-linear gradient needs to consider the latent heat vectors, as these are no longer equal and have a significant effect on the gradient. Due to the non-linearity, the temperature is iteratively determined using a Newton iteration, where the Jacobian, $\mathbf{J}$, of equation \ref{eq:phase_change_residual} is required. Using these, the temperature of the next time step can be determined.
+  \begin{subequations}
+    \begin{equation}
+      \begin{split}
+        T^{n+1}_{i+1} &= T^{n+1}_{i} + (\Delta T)_i \\
+        T^{n+1}_{i+1} &= T^{n+1}_{0} + \sum_{i=0}^n (\Delta T)_i \\
+        \text{Where: }& T_0^{n+1} = T^n
+      \end{split}
+    \end{equation}
+    \begin{equation}
+      (\Delta T)_i = [\mathbf{J} (T^{n+1}_{i})]^{-1} R(T^{n+1}_{i})
+    \end{equation}
+    \label{eq:new_temperature_sum}
+  \end{subequations}
+  
+  The gradient of the temperature vector can then be determined as shown in equation \ref{eq:phase_change_nl_gradient}. Some complications arise with the latent heat vector and matrix as the gradient of the previous temperature vector is required. These were briefly discussed in chapter \ref{chap:singe_functional_optimization}.
+  \begin{subequations}
+    \begin{equation}
+      \frac{\partial T_{i+1}^{n+1}}{\partial\rho} = \frac{\partial T^n}{\partial\rho} + \frac{\partial}{\partial\rho}(\sum_{i=0}^n (\Delta T)_i)
+    \end{equation}
+    \begin{equation}
+      \begin{split}
+        \frac{\partial}{\partial\rho}(\Delta T)_i &= \frac{\partial}{\partial\rho}\mathbf{J}^{-1} R \\
+        &= \frac{\partial \mathbf{J^{-1}}}{\partial\rho}R + \mathbf{J}^{-1}\frac{\partial R}{\partial\rho}
+      \end{split}
+    \end{equation}
+    \begin{equation}
+      \begin{split}
+        \frac{\partial \mathbf{J^{-1}}}{\partial\rho_e}R &= -\mathbf{J}^{-1}\frac{\partial \mathbf{J}}{\partial\rho_e}\mathbf{J}^{-1}R \\
+        &= -\mathbf{J}^{-1}\frac{\partial}{\partial\rho_e}\left( \mathbf{C} + \mathbf{K}\Delta t + \frac{\partial L}{\partial T}\biggr\rvert_i^{n+1} \right)\mathbf{J}^{-1}R \\
+        &= -\mathbf{J}^{-1}\left( \frac{\partial\mathbf{C}}{\partial\rho_e} + \Delta t\frac{\partial\mathbf{K}}{\partial\rho_e} + \frac{\partial}{\partial\rho_e}\left(\frac{\partial L}{\partial T}\biggr\rvert_i^{n+1}\right) \right)\mathbf{J}^{-1}R
+      \end{split}
+    \end{equation}
+    \begin{equation}
+      \begin{split}
+        \frac{\partial R}{\partial\rho} &= \frac{\partial}{\partial\rho}(f\Delta t + \mathbf{C}T^n - (L^{n+1} - L^n) - \mathbf{A}T^{n+1}_i) \\
+        &= \Delta t\frac{\partial f}{\partial\rho} + \frac{\partial}{\partial\rho}\mathbf{C}T^n - \frac{\partial}{\partial\rho}(L^{n+1} - L^n) - \frac{\partial}{\partial\rho}(\mathbf{A}T^{n+1}_i) \\
+        &= \frac{\partial\mathbf{C}}{\partial\rho}T^n + \mathbf{C}\frac{\partial T^n}{\partial\rho} - \frac{\partial L^{n+1}}{\partial\rho} + \frac{\partial L^n}{\partial\rho} - \frac{\partial\mathbf{A}}{\partial\rho}T^{n+1}_i - \mathbf{A}\frac{\partial T^{n+1}_i}{\partial\rho}
+      \end{split}
+      \end{equation}
+    \label{eq:phase_change_nl_gradient}
+  \end{subequations}
