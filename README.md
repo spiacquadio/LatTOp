@@ -1,5 +1,5 @@
 # Thesis
-Reposity for all Thesis related code
+Reposity for all Thesis related code of Stefano Piacquadio
 
 # test git
  
