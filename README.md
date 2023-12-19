@@ -5,7 +5,7 @@
 The code performs single and multi-functional topology optimisations of, so far 2D domains. The SIMP method is used. To perform a multifunctional optimisation a Pareto-optimal structure is sought with help of a bisection method.
 
 ### Use
-1. Generate the domain, mesh and boundary conditions. The code take in input .msh files. These can be generated with help of the freeware software GMSH https://gmsh.info/.
+1. Generate the domain, mesh and boundary conditions. The code takes in input .msh files. These can be generated with help of the freeware software GMSH https://gmsh.info/.
 2. Open the main.jl file and change the path of the mesh file (variable meshpath)
 3. Change the filter radius value, depending on the mesh size chosen.
 4. Choose if you want to use lattice structures, or if ageneric TO should be performed. You can do so by input of the variable `useLattice=true` for lattices, or false.
