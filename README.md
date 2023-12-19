@@ -8,7 +8,7 @@ The code performs single and multi-functional topology optimisations of, so far 
 1. Generate the domain, mesh and boundary conditions. The code takes in input .msh files. These can be generated with help of the open-source software GMSH https://gmsh.info/.
 2. Open the main.jl file and change the path of the mesh file (variable meshpath)
 3. Change the filter radius value, depending on the mesh size chosen.
-4. Run the file
+4. Run the main.jl file.
 5. Run the optimiseFunctions.jl file, in order to initialise the functions.
 6. Choose if you want to use lattice structures, or if ageneric TO should be performed. You can do so by input of the variable `useLattice=true` for lattices, or false.
 7. If you want to use lattices, you must define the unit cell topology. For this enter the variable `celltype="bcc"` or `celltype="f2ccz"`. So far only these unit cells were implemented.
